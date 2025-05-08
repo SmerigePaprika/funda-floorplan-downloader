@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Floorplan Downloader</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        padding: 16px;
+        width: 260px;
+        background: #f9f9f9;
+      }
+
+      main {
+        display: flex;
+        flex-direction: column;
+      }
+
+      #status {
+        margin-top: 12px;
+        font-size: 14px;
+        line-height: 1.4;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .success {
+        color: #2e7d32;
+      }
+
+      .error {
+        color: #c62828;
+      }
+
+      button {
+        background-color: #007bff;
+        border: none;
+        color: white;
+        padding: 10px 14px;
+        font-size: 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 12px;
+      }
+
+      button:hover:not(:disabled),
+      button:focus-visible:not(:disabled) {
+        background-color: #0056b3;
+      }
+
+      button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div id="status">Checking this page for a floorplan…</div>
+      <button id="extract" class="hidden">Download Floorplan</button>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>
