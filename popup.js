@@ -30,14 +30,16 @@ async function scanForProjectId(tabId) {
         return search(obj);
       };
 
+      const flatten = (arr) => arr.reduce((acc, val) => acc.concat(Array.isArray(val) ? flatten(val) : val), []);
       const scripts = document.querySelectorAll("script[type='application/json']");
+
       for (const script of scripts) {
         try {
           const json = JSON.parse(script.textContent.replace(/^\uFEFF/, ''));
           let projectId = findProjectId(json);
 
           if (!projectId && Array.isArray(json)) {
-            const data = json.flat ? json.flat(Infinity) : [].concat(...json);
+            const data = flatten(json);
             for (let i = 0; i < data.length - 1; i++) {
               const current = data[i];
               const next = data[i + 1];
@@ -66,6 +68,7 @@ async function scanForProjectId(tabId) {
 
 function downloadFmlWithOverlay(tabId, projectId) {
   extractButton.disabled = true;
+
   chrome.scripting.executeScript({
     target: { tabId },
     args: [projectId, BASE_URL],
@@ -93,9 +96,17 @@ function downloadFmlWithOverlay(tabId, projectId) {
         setTimeout(() => div.remove(), 6000);
       };
 
+      if (!projectId || !/^\d{8,}$/.test(projectId)) {
+        showInfo("Invalid project ID format.", true);
+        return;
+      }
+
       const url = `${BASE_URL}/${projectId}.fml`;
       fetch(url)
-        .then((res) => res.blob())
+        .then((res) => {
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return res.blob();
+        })
         .then((blob) => {
           const objectUrl = URL.createObjectURL(blob);
           const a = document.createElement("a");
@@ -107,12 +118,13 @@ function downloadFmlWithOverlay(tabId, projectId) {
           URL.revokeObjectURL(objectUrl);
           showInfo("Your floorplan has been downloaded.");
         })
-        .catch(() => {
-          showInfo("Something went wrong while downloading.", true);
+        .catch((err) => {
+          showInfo(`Download failed: ${err.message}`, true);
         });
     },
+  }).finally(() => {
+    extractButton.disabled = false;
   });
-  setTimeout(() => extractButton.disabled = false, 3000);
 }
 
 chrome.tabs.query({ active: true, currentWindow: true }, async ([tab]) => {

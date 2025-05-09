@@ -3,6 +3,16 @@
   "name": "Funda Floorplan Downloader",
   "version": "1.0",
   "description": "Detects and downloads FML floorplans from funda.nl property listings.",
+  "icons": {
+    "128": "icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Download Funda floorplan",
+    "default_icon": {
+      "128": "icon128.png"
+    }
+  },
   "permissions": [
     "scripting",
     "activeTab"
@@ -10,13 +20,14 @@
   "host_permissions": [
     "https://www.funda.nl/*"
   ],
-  "action": {
-    "default_popup": "popup.html",
-    "default_icon": {
-      "128": "icon128.png"
-    }
+  "background": {
+    "service_worker": "background.js"
   },
-  "icons": {
-    "128": "icon128.png"
-  }
+  "content_scripts": [
+    {
+      "matches": ["https://www.funda.nl/*"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ]
 }
