@@ -37,10 +37,12 @@ A Chrome extension that detects and downloads embedded floorplans (FML files) fr
 
 ```
 funda-floorplan-downloader
+├── background.js
+├── content.js
+├── icon128.png
 ├── manifest.json
 ├── popup.html
 ├── popup.js
-├── icon128.png
 ├── README.md
 ```
 
