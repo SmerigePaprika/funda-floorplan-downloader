@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Funda Floorplan Downloader",
-  "version": "1.0",
+  "version": "1.0.1",
   "description": "Detects and downloads FML floorplans from funda.nl property listings.",
   "icons": {
     "128": "icon128.png"
